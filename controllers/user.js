@@ -1,11 +1,14 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const emailRegex = new RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$");
 
 exports.signup = (req, res, next) => {
-    const { password, email } = req.body;
-    if (!password || !email) {
-        return res.status(400).json({ error: 'Bad Request' });
+    if (!req.body.password || !emailRegex.test(req.body.email)) {
+        return res.status(400).json({ error: 'Format incorrect !' });
+    }
+    if (req.body.password.length < 4) {
+        return res.status(400).json({ error: 'Le mot de passe doit contenir au moins 4 caractères !' });
     }
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
@@ -21,6 +24,9 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
+    if (!req.body.password || !emailRegex.test(req.body.email)) {
+        return res.status(400).json({ error: 'Format incorrect !' });
+    }
     User.findOne({ email: req.body.email })
         .then(user => {
             if (!user) {

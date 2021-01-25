@@ -1,14 +1,18 @@
 const express = require('express');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
+const dotenv = require('dotenv');
 
 const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
 
 const app = express();
+app.use(helmet());
 
-mongoose.connect('mongodb+srv://Heramy:0be6MIN2r7GPXvxW@cluster0.eyl5p.mongodb.net/sopekocko?retryWrites=true&w=majority', {
+dotenv.config();
+mongoose.connect('mongodb+srv://' + process.env.DATABASE_USERNAME + ':' + process.env.DATABASE_PASSWORD + '@cluster0.eyl5p.mongodb.net/sopekocko?retryWrites=true&w=majority', {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
