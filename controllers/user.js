@@ -8,7 +8,7 @@ exports.signup = (req, res, next) => {
         return res.status(400).json({ error: 'Format incorrect !' });
     }
     if (req.body.password.length < 4) {
-        return res.status(400).json({ error: 'Le mot de passe doit contenir au moins 4 caractères !' });
+        return res.status(400).json({ message: 'Le mot de passe doit contenir au moins 4 caractères !' });
     }
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
